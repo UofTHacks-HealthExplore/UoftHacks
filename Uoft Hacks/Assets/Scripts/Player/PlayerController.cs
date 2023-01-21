@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
 
     // Rotation
     private Transform cam;
-    [SerializeField] private float companionSpeed = 10f;
 
     // Gravity
     [SerializeField] private float gravity = -30f;
