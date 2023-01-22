@@ -87,6 +87,9 @@ public class FuckYou : MonoBehaviour
             else if (type == Type.GetResponse){
                 q = response;
             }
+            else if (type == Type.SendResponse){
+                GenerateResponse();
+            }
             switch (webRequest.result)
             {
                 case UnityWebRequest.Result.ConnectionError:
@@ -104,7 +107,7 @@ public class FuckYou : MonoBehaviour
     }
 
 
-    public void GenerateResponse(string text){
+    public void GenerateResponse(){
         string url = baseURL + "gen_response";
         StartCoroutine(GetRequest(url, Type.GenerateResponse, 0));
     }
@@ -120,8 +123,9 @@ public class FuckYou : MonoBehaviour
         StartCoroutine(GetRequest(url, Type.GetResponse, 0));
     }
 
-    public void SendResponse(int choice){
-        StartCoroutine(GetRequest(baseURL + "responses/" + choice +"/send", Type.SendResponse, 0));
+    public void SendResponse(string choice){
+        char c = (choice[choice.Length - 1]);
+        StartCoroutine(GetRequest(baseURL + "responses/" + c +"/send", Type.SendResponse, 0));
     }
 }
 
