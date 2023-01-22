@@ -10,6 +10,7 @@ public class DialogueManagerRevamp : MonoBehaviour
     public GameObject dialogueObject;
     public GameObject choiceObject;
     public GameObject FuckYou;
+    public GameObject player;
 
     // Text
     public GameObject dialogueText;
@@ -24,16 +25,19 @@ public class DialogueManagerRevamp : MonoBehaviour
     private bool choice = false;
     private bool exit = false;
 
-    public void DialogueCompleted(){
+    public void DialogueCompleted()
+    {
         textCompleted = true;
     }
-    public void DialogueDisappeared(){
+    public void DialogueDisappeared()
+    {
         textDisappeared = true;
     }
 
     IEnumerator WaitDialogueAnims()
     {
         yield return new WaitUntil(() => textDisappeared == true);
+        dialogueObject.GetComponent<Animator>().Play("CloseDialogue");
         Next();
     }
     IEnumerator WaitChoiceAnims()
@@ -55,8 +59,9 @@ public class DialogueManagerRevamp : MonoBehaviour
 
     }
 
-    public void StartInteraction(){
-
+    public void StartInteraction()
+    {
+        player.GetComponent<PlayerController>().lockMovement = true;
         dialogueObject.SetActive(true);
         StartDialogue();
         choiceObject.SetActive(false);
@@ -68,7 +73,8 @@ public class DialogueManagerRevamp : MonoBehaviour
         dialogueObject.GetComponent<Animator>().Play("OpenDialogue");
         dialogue = true;
     }
-    public void StartChoice(){
+    public void StartChoice()
+    {
         choiceObject.GetComponent<Animator>().Play("OpenChoice");
         choice = true;
     }
@@ -80,7 +86,8 @@ public class DialogueManagerRevamp : MonoBehaviour
             FuckYou.GetComponent<FuckYou>().SendResponse(choice);
             choiceText.GetComponent<TextAnimatorPlayer>().StartDisappearingText();
             StartCoroutine(WaitChoiceAnims());
-        } else
+        }
+        else
         {
             choiceText.GetComponent<TextAnimatorPlayer>().StartDisappearingText();
             StartCoroutine(WaitChoiceAnims());
@@ -89,9 +96,14 @@ public class DialogueManagerRevamp : MonoBehaviour
     }
 
 
-    public void Update(){
-        if (dialogue && textCompleted && Keyboard.current.anyKey.wasPressedThisFrame){            
-            dialogueObject.GetComponent<Animator>().Play("CloseDialogue");
+    public void Update()
+    {
+        if (dialogue && !textCompleted && Keyboard.current.anyKey.wasPressedThisFrame)
+        {
+            dialogueText.GetComponent<TextAnimatorPlayer>().SkipTypewriter();
+        }
+        else if (dialogue && textCompleted && Keyboard.current.anyKey.wasPressedThisFrame)
+        {
             textDisappeared = false;
             textCompleted = false;
             dialogueText.GetComponent<TextAnimatorPlayer>().StartDisappearingText();
@@ -100,7 +112,8 @@ public class DialogueManagerRevamp : MonoBehaviour
 
     }
 
-    public void Next(){
+    public void Next()
+    {
         if (exit)
         {
             dialogue = false;
@@ -109,6 +122,7 @@ public class DialogueManagerRevamp : MonoBehaviour
             dialogueObject.SetActive(false);
             //choiceObject.SetActive(false);
             // Enable player movement
+            player.GetComponent<PlayerController>().lockMovement = true;
         }
         if (dialogue)
         {
@@ -127,5 +141,5 @@ public class DialogueManagerRevamp : MonoBehaviour
 
 
 
-    
+
 }

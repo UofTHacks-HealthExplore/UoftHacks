@@ -26,6 +26,7 @@ public class ChoiceButtons : MonoBehaviour, Interactables
     public void OnInteract()
     {
         dialogueManager.Choose(this.name);
+        print(this.name);
     }
 
     public void OnEndHover()
