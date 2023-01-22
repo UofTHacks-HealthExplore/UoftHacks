@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using TMPro;
 public class FuckYou : MonoBehaviour
 {
+    public enum Type {GetResponse, GenerateResponse, GetQuestions, SendResponse};
     private string baseURL = "https://hear-with-capital-a-and-r.herokuapp.com/";
     public string curText;
 
@@ -24,6 +25,9 @@ public class FuckYou : MonoBehaviour
     bool send;
     public string response;
 
+    public string q;
+    public List<string> r;
+
     private void Update()
     {
         // transform.position = receivedPos; //assigning receivedPos in SendAndReceiveData()
@@ -33,14 +37,7 @@ public class FuckYou : MonoBehaviour
 
     private void Start()
     {
-        string url = baseURL + ConvertURL("summary?q=Rotavirus is a genus of double-stranded RNA virus and the leading cause of severe diarrhoea among infants and young children, nearly all of whom have an infection by age five. Rotavirus A, the most common species, causes more than 90 per cent of human infections. Rotavirus is transmitted by the faecal–oral route. It infects cells that line the small intestine and produces an enterotoxin, which induces gastroenteritis, leading to severe diarrhoea and sometimes death through dehydration. ");
-        // print(baseURL);
-        // A correct website page.
-        // translate("bonjour, j'aime luwai.");
-        // ThreadStart ts = new ThreadStart(Main);
-        // mThread = new Thread(ts);
-        // mThread.Start();
-        // RunAsync().Wait();
+        
     }
 
     string ConvertURL(string s)
@@ -69,7 +66,7 @@ public class FuckYou : MonoBehaviour
     //     RunAsync().Wait();
     // }
 
-    IEnumerator GetRequest(string uri, bool type)
+    IEnumerator GetRequest(string uri, Type type, int num)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -83,16 +80,12 @@ public class FuckYou : MonoBehaviour
             response = webRequest.downloadHandler.text;
             // translatedDisplay.text += response;
 
-            if (!type)
-            {
-                // GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript += "\n" + response;
-                // transcriptText.text = GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript;
-                summarize(response);
+            if (type == Type.GetQuestions && num <= 5){
+                r.Add(response);
+                GetRequest(baseURL + "responses", Type.GetQuestions, num + 1);
             }
-            else if (type)
-            {
-
-                // GameObject.Find("Spawn Sticky").GetComponent<TempARSpawn>().spawnStickyText(response);
+            else if (type == Type.GetResponse){
+                q = response;
             }
             switch (webRequest.result)
             {
@@ -110,35 +103,26 @@ public class FuckYou : MonoBehaviour
         }
     }
 
-    public void translate(string text)
-    {
 
-        string url = baseURL + "translate?q=" + ConvertURL(text);
-        StartCoroutine(GetRequest(url, false));
+    public void GenerateResponse(string text){
+        string url = baseURL + "gen_response";
+        StartCoroutine(GetRequest(url, Type.GenerateResponse, 0));
     }
 
-    public void summarize(string text)
-    {
-
-        string url = baseURL + "summary?q=" + ConvertURL(text);
-        StartCoroutine(GetRequest(url, true));
+    public void GetQuestions(){
+        r = new List<string>();
+        string url = baseURL + "responses/1";
+        StartCoroutine(GetRequest(url, Type.GetQuestions, 1));
     }
 
-    // public void AudioEnd(string text)
-    // {
-    //     if (rc.language != "en-US" || rc.isFrench)
-    //     {
-    //         translate(text);
-    //         // translatedDisplay.text += text;
-    //     }
-    //     else
-    //     {
-    //         // GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript += text;
-    //         // transcriptText.text = GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript;
-    //         summarize(text);
-    //     }
+    public void GetResponse(){
+        string url = baseURL + "question";
+        StartCoroutine(GetRequest(url, Type.GetResponse, 0));
+    }
 
-    // }
+    public void SendResponse(int choice){
+        StartCoroutine(GetRequest(baseURL + "responses/" + choice +"/send", Type.SendResponse, 0));
+    }
 }
 
 
