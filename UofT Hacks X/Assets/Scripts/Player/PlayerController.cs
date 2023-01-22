@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     Vector2 movementInput;
     Vector2 currentVelocity;
     Vector2 smoothInputVelocity;
+    public bool lockMovement;
 
     // Rotation
     private Transform cam;
@@ -51,9 +52,12 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        currentVelocity = Vector2.SmoothDamp(currentVelocity, movementInput, ref smoothInputVelocity, smoothSpeed);
-        Vector3 velocity = transform.right * currentVelocity.x + transform.forward * currentVelocity.y;
-        controller.Move(velocity * moveSpeed * Time.deltaTime);
+        if (!lockMovement)
+        {
+            currentVelocity = Vector2.SmoothDamp(currentVelocity, movementInput, ref smoothInputVelocity, smoothSpeed);
+            Vector3 velocity = transform.right * currentVelocity.x + transform.forward * currentVelocity.y;
+            controller.Move(velocity * moveSpeed * Time.deltaTime);
+        }
     }
 
     void VertMove()

@@ -9,6 +9,8 @@ using Cinemachine;
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager dialogueManager;
+    
+    private GameObject player;
 
     [Header("Dialogue Settings")]
     public bool textComplete;
@@ -28,6 +30,8 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueManager = this;
         dialogueIndex = 100;
+
+        player = GameObject.Find("Player");
     }
 
     // Update is called once per frame
@@ -46,8 +50,9 @@ public class DialogueManager : MonoBehaviour
 
         // Reset text stats
         dialogueIndex = 0;
-        PlayerManager.player.dialoguePosition = dialoguePosition;
-        PlayerManager.player.state = PlayerManager.State.Dialogue;
+        
+        //player.GetComponent<PlayerController>().lock = false;
+
     }
 
     IEnumerator StartSequence()
@@ -188,7 +193,8 @@ public class DialogueManager : MonoBehaviour
 
         dialogue.GetChild(1).GetComponent<Animator>().Play("Dialogue Box Close");
 
-        PlayerManager.player.state = PlayerManager.State.Active;
+        //player.GetComponent<PlayerController>().lock = True;
+        
         // dialogue.gameObject.SetActive(false);
         StartCoroutine(EndCycle());
     }
