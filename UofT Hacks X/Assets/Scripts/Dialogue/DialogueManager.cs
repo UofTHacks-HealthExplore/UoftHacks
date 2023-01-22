@@ -10,7 +10,7 @@ public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager dialogueManager;
     
-    private GameObject player;
+    public PlayerController player;
 
     [Header("Dialogue Settings")]
     public bool textComplete;
@@ -30,8 +30,6 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueManager = this;
         dialogueIndex = 100;
-
-        player = GameObject.Find("Player");
     }
 
     // Update is called once per frame
@@ -51,7 +49,7 @@ public class DialogueManager : MonoBehaviour
         // Reset text stats
         dialogueIndex = 0;
         
-        //player.GetComponent<PlayerController>().lock = false;
+        player.lockMovement = false;
 
     }
 
@@ -193,7 +191,7 @@ public class DialogueManager : MonoBehaviour
 
         dialogue.GetChild(1).GetComponent<Animator>().Play("Dialogue Box Close");
 
-        //player.GetComponent<PlayerController>().lock = True;
+        player.lockMovement = false;
         
         // dialogue.gameObject.SetActive(false);
         StartCoroutine(EndCycle());
