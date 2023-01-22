@@ -124,21 +124,21 @@ public class FuckYou : MonoBehaviour
         StartCoroutine(GetRequest(url, true));
     }
 
-    public void AudioEnd(string text)
-    {
-        if (rc.language != "en-US" || rc.isFrench)
-        {
-            translate(text);
-            // translatedDisplay.text += text;
-        }
-        else
-        {
-            // GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript += text;
-            // transcriptText.text = GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript;
-            summarize(text);
-        }
+    // public void AudioEnd(string text)
+    // {
+    //     if (rc.language != "en-US" || rc.isFrench)
+    //     {
+    //         translate(text);
+    //         // translatedDisplay.text += text;
+    //     }
+    //     else
+    //     {
+    //         // GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript += text;
+    //         // transcriptText.text = GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript;
+    //         summarize(text);
+    //     }
 
-    }
+    // }
 }
 
 
