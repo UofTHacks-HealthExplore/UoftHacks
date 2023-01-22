@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using TMPro;
 public class FuckYou : MonoBehaviour
 {
-    public RecordingCanvas rc;
     private string baseURL = "https://hear-with-capital-a-and-r.herokuapp.com/";
     public string curText;
 
@@ -86,14 +85,14 @@ public class FuckYou : MonoBehaviour
 
             if (!type)
             {
-                GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript += "\n" + response;
-                transcriptText.text = GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript;
+                // GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript += "\n" + response;
+                // transcriptText.text = GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript;
                 summarize(response);
             }
             else if (type)
             {
 
-                GameObject.Find("Spawn Sticky").GetComponent<TempARSpawn>().spawnStickyText(response);
+                // GameObject.Find("Spawn Sticky").GetComponent<TempARSpawn>().spawnStickyText(response);
             }
             switch (webRequest.result)
             {
@@ -110,7 +109,7 @@ public class FuckYou : MonoBehaviour
             }
         }
     }
-    
+
     public void translate(string text)
     {
 
@@ -134,8 +133,8 @@ public class FuckYou : MonoBehaviour
         }
         else
         {
-            GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript += text;
-            transcriptText.text = GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript;
+            // GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript += text;
+            // transcriptText.text = GameObject.Find("Notes Manager").GetComponent<NotesManager>().transcript;
             summarize(text);
         }
 
