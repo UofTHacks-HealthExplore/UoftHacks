@@ -10,6 +10,8 @@ public class DialogueInteract : MonoBehaviour
     {
         CamInteract interactControl = GetComponent<CamInteract>();
         interactControl.OnStartHoverEvent += OnStartHover;
+        interactControl.OnEndHoverEvent += OnEndHover;
+        interactControl.onInteractEvent += OnInteract;
     }
 
     void OnStartHover()
