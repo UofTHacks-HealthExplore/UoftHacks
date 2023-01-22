@@ -1635,7 +1635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 4d5dbf487dae1684ebb193e27aa8f40b,
+  m_Actions: {fileID: -944628639613478452, guid: 7b886c9f47abf468392b33f806e81ed8,
     type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
@@ -2337,6 +2337,7 @@ RectTransform:
   m_Children:
   - {fileID: 1034107915}
   - {fileID: 431241086}
+  - {fileID: 2111827586}
   m_Father: {fileID: 1944879575}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2751,7 +2752,6 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1538562229}
-  - {fileID: 2111827586}
   m_Father: {fileID: 1784746507}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3033,8 +3033,8 @@ RectTransform:
   - {fileID: 64697121}
   - {fileID: 2036984421}
   - {fileID: 930890068}
-  m_Father: {fileID: 1944879575}
-  m_RootOrder: 1
+  m_Father: {fileID: 1538562229}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
