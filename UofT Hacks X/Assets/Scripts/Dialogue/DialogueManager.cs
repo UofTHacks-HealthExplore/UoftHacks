@@ -31,11 +31,17 @@ public class DialogueManager : MonoBehaviour
     [Header("Dialogue Choice Settings")]
     public bool selecteChoice = false;
     public int dialogueChoice;
-    public GameObject choiceInput;
+    public string choiceInput;
+    public bool quitText;
+
+    [Header("Choice Animations")]
+    public bool choiceBoxAnim;
+    public bool closeChoiceAnim;
 
     [Header("Dialogue States")]
     public bool dialogueActive;
     public bool choiceActive;
+    public bool readyToUpdate;
     
     // Start is called before the first frame update
     void Start()
@@ -47,10 +53,29 @@ public class DialogueManager : MonoBehaviour
     void Update()
     {
         // Moves onto the next text
-        if (Keyboard.current.anyKey.wasPressedThisFrame && (dialogueActive || choiceActive) && NPCTexts.updated)
+        if (Keyboard.current.anyKey.wasPressedThisFrame && (dialogueActive || choiceActive) && NPCTexts.updated && !readyToUpdate)
         {
             textComplete = false;
             Next();
+        }
+        if (choiceBoxAnim)
+        {
+            choiceBoxes.localScale = Vector3.Lerp(choiceBoxes.localScale, Vector3.one, Time.deltaTime * 10);
+            if (choiceBoxes.localScale == Vector3.one)
+            {
+                choiceBoxAnim = false;
+                choiceText.gameObject.SetActive(true);
+                NextChoice();
+            }
+        } else if (closeChoiceAnim)
+        {
+            choiceBoxes.localScale = Vector3.Lerp(choiceBoxes.localScale, Vector3.zero, Time.deltaTime * 10);
+            if (choiceBoxes.localScale == Vector3.zero)
+            {
+                closeChoiceAnim = false;
+                choiceText.gameObject.SetActive(false);
+                readyToUpdate = true;
+            }
         }
     }
 
@@ -81,6 +106,8 @@ public class DialogueManager : MonoBehaviour
         dialogueActive = true;
     }
 
+    
+
     // Text Animator Events
     public void CompletedText()
     {
@@ -103,6 +130,13 @@ public class DialogueManager : MonoBehaviour
             // Play dialogue box open anim
             StartCoroutine(StartSequence());
         }   
+    }
+
+    public void StartChoices()
+    {
+        choiceBoxes.gameObject.SetActive(true);
+        choiceBoxes.localScale.set(Vector3.zero);
+        choiceBoxAnim = true;
     }
 
 /**
@@ -137,6 +171,7 @@ public class DialogueManager : MonoBehaviour
             dialogueText.gameObject.SetActive(false);
             dialogueText.gameObject.SetActive(true);
 
+            dialogueActive = false;
             choiceActive = true;
             
         }
@@ -144,82 +179,43 @@ public class DialogueManager : MonoBehaviour
 
     public void NextChoice()
     {
-
-    }
-
-
-    public void IsChoice()
-    {
-        if (!dialogueText.showing && !dialogueText.opened)
+        if (selectedChoice)
         {
-            StartCoroutine(dialogueText.Show());
-            dialogueChoice = 0;
-        }
-        else if (dialogueText.showed && dialogueText.showing)
-        {
-            // print("yes");
-            // TODO use better key system
-            if (Keyboard.current[Key.W].wasPressedThisFrame || Keyboard.current[Key.S].wasPressedThisFrame)
-            {
-
-                print("w or s");
-                if (Keyboard.current[Key.W].wasPressedThisFrame)
-                {
-                    dialogueChoice++;
-                }
-                else
-                {
-                    dialogueChoice--;
-                }
-                dialogueChoice = (int)Mathf.Repeat(dialogueChoice, dialogueText.nextOptions.Length);
-            }
-            else if (Keyboard.current[Key.E].wasPressedThisFrame)
-            {
-                // print("e");
-                // Record text option
-                dialogueText.StartCoroutine(dialogueText.Hide());
-            }
-        }
-        else if (!dialogueText.showed && !dialogueText.showing)
-        {
-            dialogueText.opened = false;
-            textComplete = false;
-            textDisappeared = false;
-
-            if (dialogueText.nextOptions.Length == 0)
+            if (choiceInput == "Quit")
             {
                 EndDialogue();
-            }
-            else
+            } else
             {
-                dialogueText = dialogueText.nextOptions[dialogueChoice];
-                dialogueText.gameObject.SetActive(true);
+                // RETURN CHOICE INPUT HERE
+
+                choiceActive = false;
+                dialogueActive = true;
+                closeChoiceAnim = true;
             }
         }
     }
+
     void EndDialogue()
     {
 
         Cursor.lockState = CursorLockMode.Confined;
         // Set variables
-        dialogueActive = false;
+        choiceActive = false;
 
         // Diable text
         dialogueText.gameObject.SetActive(false);
-
-
-        dialogue.GetChild(1).GetComponent<Animator>().Play("Dialogue Box Close");
 
         // Enable player movement
         player.lockMovement = false;
         
         // dialogue.gameObject.SetActive(false);
-        StartCoroutine(EndCycle());
+        //StartCoroutine(EndCycle());
     }
-
+/**
     IEnumerator EndCycle()
     {
         yield return new WaitForSeconds(0.5f);
         dialogue.gameObject.SetActive(false);
     }
+**/
 }

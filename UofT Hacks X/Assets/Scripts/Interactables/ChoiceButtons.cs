@@ -26,10 +26,7 @@ public class ChoiceButtons : MonoBehaviour, Interactables
 
     public void OnInteract()
     {
-        if (this.name == "Quit")
-        {
-            dialogueManager.
-        }
+        
 
         dialogueManager.selectedChoice = true;
         dialogueManager.choiceInput = gameObject.name;
