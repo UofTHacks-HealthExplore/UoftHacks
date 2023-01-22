@@ -16,7 +16,7 @@ public class DialogueManager : MonoBehaviour
     public bool textComplete;
     public bool textDisappeared;
     public int dialogueIndex;
-    public Transform dialogue;
+    public Transform dialogueBoxes;
     public Dialogue dialogueText;
 
     public Transform dialoguePosition;
@@ -49,7 +49,8 @@ public class DialogueManager : MonoBehaviour
         // Reset text stats
         dialogueIndex = 0;
         
-        player.lockMovement = false;
+        // Disable player movement
+        player.lockMovement = true;
 
     }
 
@@ -57,13 +58,12 @@ public class DialogueManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         // Open Dialogue box
-        dialogue.GetChild(1).gameObject.SetActive(true);
-        dialogue.GetChild(1).GetComponent<Animator>().Play("Dialogue Box Open");
+        dialogueBoxes.GetChild(0).gameObject.SetActive(true);
+        dialogueBoxes.GetChild(0).GetComponent<Animator>().Play("Dialogue Box Open");
         yield return new WaitForSeconds(0.5f);
-        dialogue.gameObject.SetActive(true);
 
-        // Enable camera
-        dialogue.GetChild(0).GetComponent<CinemachineVirtualCamera>().Priority = 100;
+        // Can Maybe remove?
+        dialogueBoxes.gameObject.SetActive(true);
 
         // Get reference to dialogue text and enable
         dialogueText = dialogue.GetComponent<DialogueObject>().dialogue;
@@ -191,6 +191,7 @@ public class DialogueManager : MonoBehaviour
 
         dialogue.GetChild(1).GetComponent<Animator>().Play("Dialogue Box Close");
 
+        // Enable player movement
         player.lockMovement = false;
         
         // dialogue.gameObject.SetActive(false);

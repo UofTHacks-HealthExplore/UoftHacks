@@ -9,6 +9,12 @@ public class CamInteract : MonoBehaviour
     private CameraLog camLog;
     private bool onScreen;
 
+
+    // Events
+    public event EventHandler OnStartHoverEvent;
+    public event EventHandler OnEndHoverEvent;
+    public event EventHandler onInteractEvent;
+
     void Awake()
     {
         camLog = GameObject.Find("Player").GetComponent<CameraLog>();
@@ -49,16 +55,16 @@ public class CamInteract : MonoBehaviour
 
     public void OnStartHover()
     {
-        print("Start hover on " + gameObject.name);        
+        OnStartHoverEvent?.invoke(this, EventArgs.Empty);     
     }
 
     public void OnEndHover()
     {
-        print("End hover on " + gameObject.name);
+        OnEndHoverEvent?.invoke(this, EventArgs.Empty);
     }
 
     public void OnInteract()
     {
-        print("Interact with " + gameObject.name);
+        onInteractEvent?.invoke(this, EventArgs.Empty);
     }
 }
