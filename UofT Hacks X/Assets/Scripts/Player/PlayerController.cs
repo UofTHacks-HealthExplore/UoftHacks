@@ -27,8 +27,9 @@ public class PlayerController : MonoBehaviour
 
     void OnMove(InputValue value)
     {
+        
+        print("bruh");
         movementInput = value.Get<Vector2>();
-
         // Rotate when moving
         float angle = Mathf.LerpAngle(transform.eulerAngles.y, cam.eulerAngles.y, Time.deltaTime);
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
