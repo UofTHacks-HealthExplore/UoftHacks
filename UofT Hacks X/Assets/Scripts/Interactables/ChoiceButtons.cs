@@ -15,7 +15,7 @@ public class ChoiceButtons : MonoBehaviour, Interactables
     public void Awake()
     {
         initialBoxScale = transform.localScale;
-        dialogueManager = GameObject.find("DIALOGUE MANAGER").GetComponent<DialogueManager>();
+        dialogueManager = GameObject.Find("DIALOGUE MANAGER").GetComponent<DialogueManager>();
     }
 
 

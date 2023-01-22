@@ -6,12 +6,13 @@ using TMPro;
 public class DialogueInputManager : MonoBehaviour
 {
     private DialogueManager dialogueManager;
+    public FuckYou f;
 
-    public Text dialogue;
-    public Text Choice1;
-    public Text Choice2;
-    public Text Choice3;
-    public Text Choice4;
+    public TMP_Text dialogue;
+    public TMP_Text Choice1;
+    public TMP_Text Choice2;
+    public TMP_Text Choice3;
+    public TMP_Text Choice4;
 
     // NEEDS TO REFER TO THE INPUT TEXT
     public bool updated;
@@ -19,6 +20,7 @@ public class DialogueInputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        f = GameObject.Find("FuckYou").GetComponent<FuckYou>();
         dialogueManager = gameObject.GetComponent<DialogueManager>();
     }
 
@@ -27,13 +29,14 @@ public class DialogueInputManager : MonoBehaviour
     {
         if (dialogueManager.readyToUpdate)
         {
-            if (updated){
+            if (f.updated){
                 dialogue.gameObject.SetActive(true);
                 Choice1.gameObject.SetActive(true);
                 Choice2.gameObject.SetActive(true);
                 Choice3.gameObject.SetActive(true);
                 Choice4.gameObject.SetActive(true);
                 // INPUT TEXT
+                
                 dialogue.gameObject.SetActive(false);
                 Choice1.gameObject.SetActive(false);
                 Choice2.gameObject.SetActive(false);
@@ -42,6 +45,8 @@ public class DialogueInputManager : MonoBehaviour
                 updated = false;
                 dialogueManager.readyToUpdate = false;
                 dialogueManager.Next();
+
+                f.updated = false;
             }
             
         }

@@ -29,7 +29,7 @@ public class DialogueManager : MonoBehaviour
     public Transform dialoguePosition;
 
     [Header("Dialogue Choice Settings")]
-    public bool selecteChoice = false;
+    public bool selectedChoice = false;
     public int dialogueChoice;
     public string choiceInput;
     public bool quitText;
@@ -53,7 +53,7 @@ public class DialogueManager : MonoBehaviour
     void Update()
     {
         // Moves onto the next text
-        if (Keyboard.current.anyKey.wasPressedThisFrame && (dialogueActive || choiceActive) && NPCTexts.updated && !readyToUpdate)
+        if (Keyboard.current.anyKey.wasPressedThisFrame && (dialogueActive || choiceActive) && !readyToUpdate)
         {
             textComplete = false;
             Next();
@@ -135,7 +135,7 @@ public class DialogueManager : MonoBehaviour
     public void StartChoices()
     {
         choiceBoxes.gameObject.SetActive(true);
-        choiceBoxes.localScale.set(Vector3.zero);
+        choiceBoxes.localScale = Vector3.zero;
         choiceBoxAnim = true;
     }
 
@@ -162,7 +162,7 @@ public class DialogueManager : MonoBehaviour
         {
             // If not done disappearing, skip disappearing
             textDisappeared = true;
-            dialogueText.GetComponent<TextAnimatorPlayer>().SkipDisappearingText();
+            // dialogueText.GetComponent<TextAnimatorPlayer>().SkipDisappearingText();
         } else
         {
             // If done typing and disappearing, move onto next text
@@ -187,7 +187,7 @@ public class DialogueManager : MonoBehaviour
             } else
             {
                 // RETURN CHOICE INPUT HERE
-
+                GameObject.Find("FuckYou").GetComponent<FuckYou>().SendResponse(choiceInput);
                 choiceActive = false;
                 dialogueActive = true;
                 closeChoiceAnim = true;

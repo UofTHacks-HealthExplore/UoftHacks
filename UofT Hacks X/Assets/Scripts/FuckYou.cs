@@ -15,11 +15,9 @@ using TMPro;
 public class FuckYou : MonoBehaviour
 {
     public enum Type {GetResponse, GenerateResponse, GetQuestions, SendResponse};
-    private string baseURL = "https://hear-with-capital-a-and-r.herokuapp.com/";
+    private string baseURL = "http://kevinzwang5129.pythonanywhere.com/";
     public string curText;
 
-    public Text translatedDisplay;
-    public TMP_Text transcriptText;
     bool running;
 
     bool send;
@@ -28,6 +26,7 @@ public class FuckYou : MonoBehaviour
     public string q;
     public List<string> r;
 
+    public bool updated;
     private void Update()
     {
         // transform.position = receivedPos; //assigning receivedPos in SendAndReceiveData()
@@ -82,7 +81,10 @@ public class FuckYou : MonoBehaviour
 
             if (type == Type.GetQuestions && num <= 5){
                 r.Add(response);
-                GetRequest(baseURL + "responses", Type.GetQuestions, num + 1);
+                GetRequest(baseURL + "responses/"+num, Type.GetQuestions, num + 1);
+                if (num >= 5){
+                    updated = true;
+                }
             }
             else if (type == Type.GetResponse){
                 q = response;
@@ -108,11 +110,12 @@ public class FuckYou : MonoBehaviour
 
 
     public void GenerateResponse(){
-        string url = baseURL + "gen_response";
+        string url = baseURL + "gen_responses";
         StartCoroutine(GetRequest(url, Type.GenerateResponse, 0));
     }
 
     public void GetQuestions(){
+        updated = false;
         r = new List<string>();
         string url = baseURL + "responses/1";
         StartCoroutine(GetRequest(url, Type.GetQuestions, 1));

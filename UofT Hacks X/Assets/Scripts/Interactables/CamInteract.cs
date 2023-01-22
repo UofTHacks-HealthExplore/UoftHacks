@@ -13,7 +13,7 @@ public class CamInteract : MonoBehaviour
     // Events
     public event EventHandler OnStartHoverEvent;
     public event EventHandler OnEndHoverEvent;
-    public event EventHandler onInteractEvent;
+    public event EventHandler OnInteractEvent;
 
     void Awake()
     {
@@ -55,16 +55,16 @@ public class CamInteract : MonoBehaviour
 
     public void OnStartHover()
     {
-        OnStartHoverEvent?.invoke(this, EventArgs.Empty);     
+        OnStartHoverEvent?.Invoke(this, EventArgs.Empty);     
     }
 
     public void OnEndHover()
     {
-        OnEndHoverEvent?.invoke(this, EventArgs.Empty);
+        OnEndHoverEvent?.Invoke(this, EventArgs.Empty);
     }
 
     public void OnInteract()
     {
-        onInteractEvent?.invoke(this, EventArgs.Empty);
+        OnInteractEvent?.Invoke(this, EventArgs.Empty);
     }
 }
