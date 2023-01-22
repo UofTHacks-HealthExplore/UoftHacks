@@ -64,6 +64,7 @@ Shader "FAE/Sunshaft Particle"
 				uniform fixed4 _TintColor;
 				uniform float4 _MainTex_ST;
 				uniform sampler2D_float _CameraDepthTexture;
+				// uniform float sampler_CameraDepthTexture;
 				uniform float _InvFade;
 				uniform float _Opacity;
 				uniform float _Fadedistance;
@@ -95,7 +96,8 @@ Shader "FAE/Sunshaft Particle"
 				fixed4 frag ( v2f i  ) : SV_Target
 				{
 					#ifdef SOFTPARTICLES_ON
-						float sceneZ = LinearEyeDepth (SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)));
+						// float sceneZ = LinearEyeDepth (SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)));
+						float sceneZ = 0;
 						float partZ = i.projPos.z;
 						float fade = saturate (_InvFade * (sceneZ-partZ));
 						i.color.a *= fade;
