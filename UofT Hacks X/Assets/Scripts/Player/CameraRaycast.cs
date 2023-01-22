@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraRaycasting : MonoBehaviour
+public class CameraRaycast : MonoBehaviour
 {
 
     [SerializeField] private float range;
     [SerializeField] private LayerMask playerLayer;
-
-    private Interactables currentTarget;
+    public Interactables currentTarget;
     private Camera mainCamera;
     private PlayerController player;
 
@@ -39,7 +38,7 @@ public class CameraRaycasting : MonoBehaviour
         RaycastHit hit;
 
 
-        Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2, 0));
+        Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
 
         if (Physics.Raycast(ray, out hit, range))
         {

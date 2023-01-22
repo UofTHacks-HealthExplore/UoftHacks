@@ -44,6 +44,8 @@ public class CameraLog : MonoBehaviour
         if (closestObject != null){
             if (Vector3.Distance(closestObject.transform.position, transform.position) < maxRange){
                 visibleObject = closestObject;
+            } else {
+                visibleObject = null;
             }
         }
     }

@@ -10,12 +10,11 @@ public class ChoiceButtons : MonoBehaviour, Interactables
 
     // Scale Variables
     private Vector3 initialBoxScale;
-    private DialogueManager dialogueManager;
+    public DialogueManagerRevamp dialogueManager;
 
     public void Awake()
     {
         initialBoxScale = transform.localScale;
-        dialogueManager = GameObject.Find("DIALOGUE MANAGER").GetComponent<DialogueManager>();
     }
 
 
@@ -26,10 +25,7 @@ public class ChoiceButtons : MonoBehaviour, Interactables
 
     public void OnInteract()
     {
-        
-
-        dialogueManager.selectedChoice = true;
-        dialogueManager.choiceInput = gameObject.name;
+        dialogueManager.Choose(this.name);
     }
 
     public void OnEndHover()

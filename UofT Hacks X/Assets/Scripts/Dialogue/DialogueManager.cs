@@ -94,9 +94,10 @@ public class DialogueManager : MonoBehaviour
     {
         // Open Dialogue box
         dialogueBox.gameObject.SetActive(true);
-        dialogueBox.GetComponent<Animator>().Play("Dialogue Box Open");
+        
         yield return new WaitForSeconds(0.5f);
-
+        dialogueBox.GetComponent<Animator>().Play("OpenDialogue");
+        yield return new WaitForSeconds(0.5f);
 
         // Enable Dialogue Text
         dialogueText.gameObject.SetActive(true);
@@ -124,9 +125,11 @@ public class DialogueManager : MonoBehaviour
     {
         if (choiceActive)
         {
+            print("PLaying choice");
             NextChoice();
         } else
         {
+            print("PLaying dialogue");
             // Play dialogue box open anim
             StartCoroutine(StartSequence());
         }   
@@ -168,14 +171,21 @@ public class DialogueManager : MonoBehaviour
             // If done typing and disappearing, move onto next text
             textComplete = false;
             textDisappeared = false;
-            dialogueText.gameObject.SetActive(false);
-            dialogueText.gameObject.SetActive(true);
-
+            
+            StartCoroutine(WaitDialogueAnim());
+            dialogueBox.GetComponent<Animator>().Play("CloseDialogue");
+            StartCoroutine(WaitDialogueAnim());
             dialogueActive = false;
             choiceActive = true;
             
         }
     }
+
+    IEnumerator WaitDialogueAnim()
+    {
+        yield return new WaitForSeconds(0.5f);
+    }
+
 
     public void NextChoice()
     {

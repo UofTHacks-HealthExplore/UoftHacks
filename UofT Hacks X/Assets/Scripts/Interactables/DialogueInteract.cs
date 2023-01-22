@@ -19,19 +19,25 @@ public class DialogueInteract : MonoBehaviour
     void OnStartHover(object sender, EventArgs e)
     {
         if (!indicator.gameObject.activeInHierarchy) indicator.gameObject.SetActive(true);
-        indicator.Play("Text Indicator Open");
+        indicator.Play("Open");
     }
 
     void OnEndHover(object sender, EventArgs e)
     {
-        if (indicator.gameObject.activeInHierarchy) indicator.gameObject.SetActive(false);
-        indicator.Play("Text Indicator Close");
+        indicator.Play("Close");
+        StartCoroutine(CloseIndicator());
     }
 
     void OnInteract(object sender, EventArgs e)
     {
-        DialogueManager.dialogueManager.StartDialogue();
+        GameObject.Find("DIALOGUE MANAGER").GetComponent<DialogueManagerRevamp>().StartInteraction();
+        indicator.Play("Close"); 
+        StartCoroutine(CloseIndicator());
+    }
+
+    IEnumerator CloseIndicator()
+    {
+        yield return new WaitForSeconds(0.6f);
         if (indicator.gameObject.activeInHierarchy) indicator.gameObject.SetActive(false);
-        indicator.Play("Text Indicator Close"); 
     }
 }
