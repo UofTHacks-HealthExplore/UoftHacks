@@ -16,38 +16,49 @@ public class DialogueManager : MonoBehaviour
     public bool textComplete;
     public bool textDisappeared;
     public int dialogueIndex;
-    public Transform dialogueBoxes;
-    public Dialogue dialogueText;
+    // Dialogue Box Object
+    public Transform dialogueBox;
+    // Output Text Object
+    public GameObject dialogueText;
+    // Choices Object
+    public Transform choiceBoxes;
+    // Choices Object
+    public Transform choiceText;
+    public Dialogue NPCTexts;
 
     public Transform dialoguePosition;
-    public bool dialogueActive;
 
     [Header("Dialogue Choice Settings")]
+    public bool selecteChoice = false;
     public int dialogueChoice;
+    public GameObject choiceInput;
 
+    [Header("Dialogue States")]
+    public bool dialogueActive;
+    public bool choiceActive;
+    
     // Start is called before the first frame update
     void Start()
     {
         dialogueManager = this;
-        dialogueIndex = 100;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.anyKey.wasPressedThisFrame && dialogueActive)
+        // Moves onto the next text
+        if (Keyboard.current.anyKey.wasPressedThisFrame && (dialogueActive || choiceActive) && NPCTexts.updated)
         {
+            textComplete = false;
             Next();
         }
     }
 
     public void StartDialogue()
     {
-        if (dialogueActive) return;
-        if (dialogueIndex != 0) StartCoroutine(StartSequence());
+        if (dialogueActive || choiceActive) return;
+        StartCoroutine(StartSequence());
 
-        // Reset text stats
-        dialogueIndex = 0;
         
         // Disable player movement
         player.lockMovement = true;
@@ -56,65 +67,86 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator StartSequence()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         // Open Dialogue box
-        dialogueBoxes.GetChild(0).gameObject.SetActive(true);
-        dialogueBoxes.GetChild(0).GetComponent<Animator>().Play("Dialogue Box Open");
+        dialogueBox.gameObject.SetActive(true);
+        dialogueBox.GetComponent<Animator>().Play("Dialogue Box Open");
         yield return new WaitForSeconds(0.5f);
 
-        // Can Maybe remove?
-        dialogueBoxes.gameObject.SetActive(true);
 
-        // Get reference to dialogue text and enable
-        dialogueText = dialogue.GetComponent<DialogueObject>().dialogue;
+        // Enable Dialogue Text
         dialogueText.gameObject.SetActive(true);
 
         // Start dialogue   
         textComplete = false;
         dialogueActive = true;
+    }
 
+    // Text Animator Events
+    public void CompletedText()
+    {
+        textComplete = true;
+    }
+
+    public void DisappearedText()
+    {
+        textDisappeared = true;
+        Next();
     }
 
     public void Next()
     {
-        // Debug.Log("Next");
-        if (dialogueText.isChoice)
+        if (choiceActive)
         {
-            IsChoice();
-            return;
-        }
+            NextChoice();
+        } else
+        {
+            // Play dialogue box open anim
+            StartCoroutine(StartSequence());
+        }   
+    }
 
-        // If text is not a choice
-        if (textComplete && !textDisappeared)
+/**
+    IEnumerator StartDialogue()
+    {
+        // Dialogue Box Open Anim (Text needs to be updated)
+        dialogueBox.gameObject.SetActive(true);
+        dialogueBox.GetComponent<Animator>().Play("Dialogue Box Open");
+        dialogueText.update
+        yield return new WaitForSeconds(0.5f);
+        dialogueText.gameObject.SetActive(true);
+
+    }
+**/
+    public void NextDialogue()
+    {
+        if (!textComplete)
         {
-            // Disappear text
-            dialogueText.GetComponent<TextAnimatorPlayer>().StartDisappearingText();
-        }
-        else if (textComplete && textDisappeared)
+            // If not done typing, skip typing
+            textComplete = true;
+            dialogueText.GetComponent<TextAnimatorPlayer>().SkipTypewriter();
+        } else if (!textDisappeared)
         {
+            // If not done disappearing, skip disappearing
+            textDisappeared = true;
+            dialogueText.GetComponent<TextAnimatorPlayer>().SkipDisappearingText();
+        } else
+        {
+            // If done typing and disappearing, move onto next text
             textComplete = false;
             textDisappeared = false;
+            dialogueText.gameObject.SetActive(false);
+            dialogueText.gameObject.SetActive(true);
 
-            if (dialogueText.nextOptions.Length == 0)
-            {
-                EndDialogue();
-            }
-            else
-            {
-                dialogueText.gameObject.SetActive(false);
-                dialogueText = dialogueText.nextOptions[0];
-                dialogueText.gameObject.SetActive(true);
-
-                if (dialogueText.isChoice) IsChoice();
-            }
-        }
-        else
-        {
-            textComplete = true;
-
-            dialogueText.GetComponent<TextAnimatorPlayer>().SkipTypewriter();
+            choiceActive = true;
+            
         }
     }
+
+    public void NextChoice()
+    {
+
+    }
+
 
     public void IsChoice()
     {
@@ -165,25 +197,12 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
-    public void CompletedText()
-    {
-        textComplete = true;
-    }
-
-    public void DisappearedText()
-    {
-        textDisappeared = true;
-        Next();
-    }
     void EndDialogue()
     {
 
         Cursor.lockState = CursorLockMode.Confined;
         // Set variables
         dialogueActive = false;
-
-        // Disable camera
-        dialogue.GetChild(0).GetComponent<CinemachineVirtualCamera>().Priority = 0;
 
         // Diable text
         dialogueText.gameObject.SetActive(false);

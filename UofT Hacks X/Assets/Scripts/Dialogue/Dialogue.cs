@@ -21,6 +21,22 @@ public class Dialogue : MonoBehaviour
 
     public Vector2 scale;
 
+    // Button Variables
+    public bool quitText;
+
+
+    // Getting Text from OpenAI
+    public bool updated = false;
+    public string textOutput;
+    public List<string> responses;
+
+
+    // WHEN OBJECT IS ACTIVATED, CALL THIS FUNCTION AS SOON AS THE TEXT IS GENERATED
+    public void UpdateText()
+    {
+        updated = true;
+    }
+
     // Called when dialogue choice is opened
     public IEnumerator Show()
     {

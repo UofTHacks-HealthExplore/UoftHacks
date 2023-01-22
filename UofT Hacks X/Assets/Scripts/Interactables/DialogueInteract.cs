@@ -22,12 +22,14 @@ public class DialogueInteract : MonoBehaviour
 
     void OnEndHover()
     {
+        if (indicator.gameObject.activeInHierarchy) indicator.gameObject.SetActive(false);
         indicator.Play("Text Indicator Close");
     }
 
     void OnInteract()
     {
         DialogueManager.dialogueManager.StartDialogue();
-        if (indicator.gameObject.activeInHierarchy) indicator.Play("Text Indicator Close");
+        if (indicator.gameObject.activeInHierarchy) indicator.gameObject.SetActive(false);
+        indicator.Play("Text Indicator Close"); 
     }
 }
